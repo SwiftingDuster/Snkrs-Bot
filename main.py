@@ -71,7 +71,7 @@ def run(driver, shoe_type, username, password, url, shoe_size, login_time=None, 
             
     if release_time:
         LOGGER.info("Waiting until release time: " + release_time)
-        pause.until(date_parser.parse(release_time))
+        pause.until(date_parser.parse(release_time, dayfirst=True))
 
     num_retries_attempted = 0
     while True:
@@ -111,11 +111,12 @@ def run(driver, shoe_type, username, password, url, shoe_size, login_time=None, 
             if purchase:
                 try:
                     click_submit_button(driver=driver)
+                    LOGGER.info("Purchased shoe")
                 except Exception as e:
                     LOGGER.exception("Failed to click submit button: " + str(e))
                     six.reraise(Exception, e, sys.exc_info()[2])
 
-            LOGGER.info("Purchased shoe")
+            LOGGER.info("===== Done =====")
             break
         except Exception:
             if num_retries and num_retries_attempted < num_retries:
